@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/rise_of_the_early_dawn.mp3-7ff596ad8253e3d9b71ea8476f67d80c.mp3str"
+
+[deps]
+
+source_file="res://assets/music/rise_of_the_early_dawn.mp3"
+dest_files=[ "res://.import/rise_of_the_early_dawn.mp3-7ff596ad8253e3d9b71ea8476f67d80c.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

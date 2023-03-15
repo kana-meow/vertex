@@ -2,6 +2,10 @@ extends KinematicBody2D
 
 class_name player
 
+enum { move, climb }
+
+var state = move
+
 var velocity = Vector2.ZERO
 var fast_fall = false
 
@@ -13,12 +17,26 @@ export(int) var fast_fall_speed = 40
 export(int) var acceleration = 15
 export(int) var friction = 15
 export(int) var gravity = 5
+export(int) var climb_speed = 60
 
 func _physics_process(delta):
-	apply_gravity()
-	
 	var input = Vector2.ZERO
-	input.x = Input.get_action_strength("key_d") - Input.get_action_strength("key_a")
+	input.x = Input.get_axis("left", "right")
+	input.y = Input.get_axis("up", "down")
+	
+	if input.x < 0:
+		$AnimatedSprite.flip_h = true
+	elif input.x > 0:
+		$AnimatedSprite.flip_h = false
+	
+	match state:
+		move: move_state(input)
+		climb: climb_state(input)
+
+func move_state(input):
+	if is_on_ladder() and Input.is_action_pressed("up"): state = climb
+	
+	apply_gravity()
 	
 	if input.x == 0:
 		apply_friction()
@@ -28,16 +46,11 @@ func _physics_process(delta):
 		apply_acceleration(input.x)
 		$AnimatedSprite.animation = "run"
 		$AnimatedSprite.playing = true
-		
-		if input.x < 0:
-			$AnimatedSprite.flip_h = true
-		else:
-			$AnimatedSprite.flip_h = false
 	
 	if is_on_floor():
 		fast_fall = false
 		
-		if Input.is_action_just_pressed("key_space"):
+		if Input.is_action_just_pressed("jump"):
 			velocity.y = jump_height
 	else:
 		$AnimatedSprite.animation = "jump"
@@ -45,7 +58,7 @@ func _physics_process(delta):
 		
 		$CollisionShape2D.scale.y = 0.8
 		
-		if Input.is_action_just_released("key_space") and velocity.y < jump_release:
+		if Input.is_action_just_released("jump") and velocity.y < jump_release:
 			velocity.y = jump_release
 		
 		if velocity.y > fast_fall_height and not fast_fall:
@@ -61,6 +74,25 @@ func _physics_process(delta):
 		$AnimatedSprite.frame = 1
 		
 		$CollisionShape2D.scale.y = 1
+
+func climb_state(input):
+	if not is_on_ladder(): state = move
+	
+	$AnimatedSprite.animation = "idle"
+	
+	velocity = input * climb_speed
+	velocity = move_and_slide(velocity, Vector2.UP)
+
+func is_on_ladder():
+	if not $RayCast2D.is_colliding():
+		return false
+	
+	var collider = $RayCast2D.get_collider()
+	
+	if not collider is ladder:
+		return false
+	
+	return true
 
 func apply_gravity():
 	velocity.y += gravity
