@@ -9,6 +9,9 @@ var state = move
 var velocity = Vector2.ZERO
 var fast_fall = false
 
+var buffered_jump = false
+var coyote_jump = false
+
 export(int) var max_speed = 100
 export(int) var jump_height = -120
 export(int) var jump_release = -50
@@ -47,11 +50,13 @@ func move_state(input):
 		$AnimatedSprite.animation = "run"
 		$AnimatedSprite.playing = true
 	
-	if is_on_floor():
+	if is_on_floor() or coyote_jump:
 		fast_fall = false
 		
-		if Input.is_action_just_pressed("jump"):
+		if Input.is_action_just_pressed("jump") or buffered_jump:
 			velocity.y = jump_height
+
+			buffered_jump = false
 	else:
 		$AnimatedSprite.animation = "jump"
 		$AnimatedSprite.playing = false
@@ -64,8 +69,14 @@ func move_state(input):
 		if velocity.y > fast_fall_height and not fast_fall:
 			velocity.y += fast_fall_speed
 			fast_fall = true
+
+		if Input.is_action_just_pressed("jump"):
+			buffered_jump = true
+			$JumpBuffer.start()
 	
 	var was_in_air = not is_on_floor()
+
+	var was_on_floor = is_on_floor()
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
 	
@@ -74,6 +85,12 @@ func move_state(input):
 		$AnimatedSprite.frame = 1
 		
 		$CollisionShape2D.scale.y = 1
+	
+	var just_left_ground = not is_on_floor() and was_on_floor
+
+	if just_left_ground and velocity.y >= 0:
+		coyote_jump = true
+		$CoyoteTime.start()
 
 func climb_state(input):
 	if not is_on_ladder(): state = move
@@ -103,3 +120,9 @@ func apply_friction():
 
 func apply_acceleration(strength):
 	velocity.x = move_toward(velocity.x, max_speed * strength, acceleration)
+
+func _on_JumpBuffer_timeout():
+	buffered_jump = false
+
+func _on_CoyoteTime_timeout():
+	coyote_jump = false
