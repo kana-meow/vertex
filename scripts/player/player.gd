@@ -133,3 +133,9 @@ func _on_CoyoteTime_timeout():
 func _on_spikes_player_entered_spike():
 	self.position.x = 136
 	self.position.y = 132
+
+func _on_campfire_player_entered_campfire():
+	print("entered healing area")
+
+func _on_campfire_player_exited_campfire():
+	print("exited healing area")
