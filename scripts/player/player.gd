@@ -13,14 +13,19 @@ var buffered_jump = false
 var coyote_jump = false
 
 export(int) var max_speed = 100
-export(int) var jump_height = -120
-export(int) var jump_release = -50
-export(int) var fast_fall_height = 20
-export(int) var fast_fall_speed = 40
 export(int) var acceleration = 15
 export(int) var friction = 15
+
 export(int) var gravity = 5
+export(int) var fast_fall_height = 20
+export(int) var fast_fall_speed = 40
+export(int) var jump_height = -120
+export(int) var jump_release = -50
+
 export(int) var climb_speed = 60
+
+export(int) var max_health = 3
+var health = max_health
 
 func _ready():
 	$AnimatedSprite.animation = "idle"
@@ -38,6 +43,16 @@ func _physics_process(delta):
 	match state:
 		move: move_state(input)
 		climb: climb_state(input)
+	
+	if Input.is_action_just_pressed("reset"):
+		position.x = 136
+		position.y = 132
+	
+	if health <= 0: 
+		get_tree().reload_current_scene()
+		health = max_health
+	
+	print(health)
 
 func move_state(input):
 	if is_on_ladder() and Input.is_action_pressed("up"): state = climb
@@ -129,13 +144,30 @@ func _on_JumpBuffer_timeout():
 
 func _on_CoyoteTime_timeout():
 	coyote_jump = false
+	
+func take_damage():
+	if $IFrames.is_stopped():
+		health -= 1
+		$IFrames.start()
+		$AnimatedSprite.modulate.a = .5
+
+func _on_IFrames_timeout():
+	$AnimatedSprite.modulate.a = 1
+
+func heal():
+	if health > 3: health = 3
+	elif health == 3: pass
+	else: health += 1
+
+func _on_HealCooldown_timeout():
+	heal()
 
 func _on_spikes_player_entered_spike():
-	self.position.x = 136
-	self.position.y = 132
+	velocity.y = jump_height * 1.25
+	take_damage()
 
 func _on_campfire_player_entered_campfire():
-	print("entered healing area")
+	$HealCooldown.start()
 
 func _on_campfire_player_exited_campfire():
-	print("exited healing area")
+	$HealCooldown.stop()

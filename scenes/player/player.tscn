@@ -82,6 +82,12 @@ one_shot = true
 wait_time = 0.1
 one_shot = true
 
+[node name="HealCooldown" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="IFrames" type="Timer" parent="."]
+one_shot = true
+
 [node name="Dark" type="Light2D" parent="."]
 texture = ExtResource( 4 )
 texture_scale = 4.0
@@ -98,3 +104,5 @@ shadow_gradient_length = 1.0
 
 [connection signal="timeout" from="JumpBuffer" to="." method="_on_JumpBuffer_timeout"]
 [connection signal="timeout" from="CoyoteTime" to="." method="_on_CoyoteTime_timeout"]
+[connection signal="timeout" from="HealCooldown" to="." method="_on_HealCooldown_timeout"]
+[connection signal="timeout" from="IFrames" to="." method="_on_IFrames_timeout"]
