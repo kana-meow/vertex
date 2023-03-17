@@ -22,6 +22,9 @@ export(int) var friction = 15
 export(int) var gravity = 5
 export(int) var climb_speed = 60
 
+func _ready():
+	$AnimatedSprite.animation = "idle"
+
 func _physics_process(delta):
 	var input = Vector2.ZERO
 	input.x = Input.get_axis("left", "right")
