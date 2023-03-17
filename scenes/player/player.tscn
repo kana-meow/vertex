@@ -65,6 +65,7 @@ shape = SubResource( 3 )
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2( 0, -15 )
 current = true
+zoom = Vector2( 0.75, 0.75 )
 smoothing_enabled = true
 smoothing_speed = 10.0
 
@@ -92,13 +93,13 @@ one_shot = true
 texture = ExtResource( 4 )
 texture_scale = 4.0
 color = Color( 0, 0, 0, 1 )
-energy = 0.5
+energy = 0.8
 mode = 2
 
 [node name="Light" type="Light2D" parent="."]
 texture = ExtResource( 3 )
-texture_scale = 2.5
-color = Color( 1, 0.8, 0.8, 1 )
+texture_scale = 2.0
+color = Color( 1, 0.937255, 0.937255, 1 )
 shadow_enabled = true
 shadow_gradient_length = 1.0
 

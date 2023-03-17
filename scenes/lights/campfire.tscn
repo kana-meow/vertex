@@ -41,7 +41,9 @@ centered = false
 [node name="Light2D" type="Light2D" parent="campfire"]
 position = Vector2( 8, 8 )
 texture = ExtResource( 2 )
-color = Color( 1, 0.141176, 0, 1 )
+texture_scale = 1.5
+color = Color( 1, 0.301961, 0.117647, 1 )
+energy = 1.5
 shadow_enabled = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
