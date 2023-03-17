@@ -68,12 +68,13 @@ rotate = false
 [node name="Light2D" type="Light2D" parent="PathFollow2D"]
 texture = ExtResource( 2 )
 texture_scale = 3.0
-color = Color( 1, 0.164706, 0, 1 )
+color = Color( 1, 0.278431, 0.137255, 1 )
+shadow_enabled = true
+shadow_gradient_length = 1.0
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="PathFollow2D"]
 frames = SubResource( 6 )
 animation = "fly"
-frame = 2
 playing = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
