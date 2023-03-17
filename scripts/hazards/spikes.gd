@@ -1,5 +1,7 @@
 extends Area2D
 
+signal player_entered_spike
+
 func _on_spikes_body_entered(body):
 	if body is player:
-		get_tree().reload_current_scene()
+		emit_signal("player_entered_spike")

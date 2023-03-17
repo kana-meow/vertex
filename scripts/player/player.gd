@@ -129,3 +129,7 @@ func _on_JumpBuffer_timeout():
 
 func _on_CoyoteTime_timeout():
 	coyote_jump = false
+
+func _on_spikes_player_entered_spike():
+	self.position.x = 136
+	self.position.y = 132

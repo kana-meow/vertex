@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/player/player.png" type="Texture" id=1]
 [ext_resource path="res://scripts/player/player.gd" type="Script" id=2]
+[ext_resource path="res://assets/player/light.png" type="Texture" id=3]
+[ext_resource path="res://assets/player/dark.png" type="Texture" id=4]
 
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 1 )
@@ -79,6 +81,20 @@ one_shot = true
 [node name="CoyoteTime" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
+
+[node name="Dark" type="Light2D" parent="."]
+texture = ExtResource( 4 )
+texture_scale = 4.0
+color = Color( 0, 0, 0, 1 )
+energy = 0.5
+mode = 2
+
+[node name="Light" type="Light2D" parent="."]
+texture = ExtResource( 3 )
+texture_scale = 2.5
+color = Color( 1, 0.8, 0.8, 1 )
+shadow_enabled = true
+shadow_gradient_length = 1.0
 
 [connection signal="timeout" from="JumpBuffer" to="." method="_on_JumpBuffer_timeout"]
 [connection signal="timeout" from="CoyoteTime" to="." method="_on_CoyoteTime_timeout"]
