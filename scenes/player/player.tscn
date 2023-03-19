@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/player/player.png" type="Texture" id=1]
 [ext_resource path="res://scripts/player/player.gd" type="Script" id=2]
 [ext_resource path="res://assets/player/light.png" type="Texture" id=3]
 [ext_resource path="res://assets/player/dark.png" type="Texture" id=4]
+[ext_resource path="res://scenes/player/health bar.tscn" type="PackedScene" id=5]
 
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 1 )
@@ -84,7 +85,7 @@ wait_time = 0.1
 one_shot = true
 
 [node name="HealCooldown" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 2.0
 
 [node name="IFrames" type="Timer" parent="."]
 one_shot = true
@@ -98,10 +99,12 @@ mode = 2
 
 [node name="Light" type="Light2D" parent="."]
 texture = ExtResource( 3 )
-texture_scale = 2.0
+texture_scale = 3.0
 color = Color( 1, 0.937255, 0.937255, 1 )
 shadow_enabled = true
 shadow_gradient_length = 1.0
+
+[node name="health bar" parent="." instance=ExtResource( 5 )]
 
 [connection signal="timeout" from="JumpBuffer" to="." method="_on_JumpBuffer_timeout"]
 [connection signal="timeout" from="CoyoteTime" to="." method="_on_CoyoteTime_timeout"]

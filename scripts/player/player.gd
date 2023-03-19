@@ -24,8 +24,12 @@ export(int) var jump_release = -50
 
 export(int) var climb_speed = 60
 
-export(int) var max_health = 3
+export(int) var max_health = 6
 var health = max_health
+
+var hp_green = preload("res://scenes/player/health bar green.tres")
+var hp_yellow = preload("res://scenes/player/health bar yellow.tres")
+var hp_red = preload("res://scenes/player/health bar red.tres")
 
 func _ready():
 	$AnimatedSprite.animation = "idle"
@@ -52,7 +56,15 @@ func _physics_process(delta):
 		get_tree().reload_current_scene()
 		health = max_health
 	
-	print(health)
+	$"health bar/ProgressBar".value = health
+	$"health bar/ProgressBar".max_value = max_health
+	
+	if $"health bar/ProgressBar".value == $"health bar/ProgressBar".max_value:
+		$"health bar/ProgressBar".theme = hp_green
+	elif $"health bar/ProgressBar".max_value / $"health bar/ProgressBar".value < 2:
+		$"health bar/ProgressBar".theme = hp_yellow
+	else:
+		$"health bar/ProgressBar".theme = hp_red
 
 func move_state(input):
 	if is_on_ladder() and Input.is_action_pressed("up"): state = climb
@@ -155,8 +167,8 @@ func _on_IFrames_timeout():
 	$AnimatedSprite.modulate.a = 1
 
 func heal():
-	if health > 3: health = 3
-	elif health == 3: pass
+	if health > max_health: health = max_health
+	elif health == max_health: pass
 	else: health += 1
 
 func _on_HealCooldown_timeout():
